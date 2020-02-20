@@ -13,3 +13,6 @@ if (!runnable.length) {
 }
 
 runnable.forEach(testsContext);
+
+import './enzyme_setup';
+
