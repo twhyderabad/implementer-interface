@@ -20,6 +20,7 @@ import get from 'lodash/get';
 import isEqual from 'lodash/isEqual';
 import { clearTranslations, formEventUpdate, saveEventUpdate } from '../actions/control';
 import { Exception } from 'form-builder/helpers/Exception';
+import PreviewPopupModal from 'form-builder/components/PreviewPopupModal';
 
 
 export class FormDetailContainer extends Component {
@@ -37,6 +38,7 @@ export class FormDetailContainer extends Component {
     this.closeFormModal = this.closeFormModal.bind(this);
     this.onPublish = this.onPublish.bind(this);
     this.cloneFormResource = this.cloneFormResource.bind(this);
+    this.onPreview = this.onPreview.bind(this);
     props.dispatch(deselectControl());
     props.dispatch(removeSourceMap());
     props.dispatch(removeControlProperties());
@@ -133,6 +135,12 @@ export class FormDetailContainer extends Component {
     }
   }
 
+  onPreview() {
+    console.log('preview');
+    this.setState({ showModal: true });
+  }
+
+
   getFormJson() {
     if (this.formDetail) {
       return this.formDetail.getFormJson();
@@ -211,6 +219,16 @@ export class FormDetailContainer extends Component {
       );
     }
     return null;
+  }
+
+  showPreviewButton() {
+
+    return (
+                <button
+                  className="publish-button"
+                  onClick={ this.onPreview }
+                >Preview</button>
+    );
   }
 
   showSaveButton() {
@@ -405,12 +423,17 @@ export class FormDetailContainer extends Component {
                   <div className="fr">
                       {this.showSaveButton()}
                       {this.showPublishButton()}
+                      {this.showPreviewButton()}
                   </div>
                 </div>
               </div>
               <div className="container-content-wrap">
                 <div className="container-content">
                     {this.showEditButton()}
+                  <PreviewPopupModal showModal={this.state.showModal}
+                                     closeModal={() => this.closeFormModal()}
+                                     formData = {this.state.formData}
+                  />
                   <FormDetail
                     defaultLocale={defaultLocale}
                     formData={this.state.formData}

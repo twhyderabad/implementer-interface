@@ -27,7 +27,7 @@ export class ControlWrapper extends Draggable {
     this.onSelected = this.onSelected.bind(this);
     this.childControl = undefined;
     const isBeingDragged = props.parentRef ? props.parentRef.props.isBeingDragged : false;
-    this.state = { active: false, showDeleteModal: false, isBeingDragged };
+    this.state = { active: false, showDeleteModal: false, isBeingDragged, showPreviewModal: false };
     this.storeChildRef = this.storeChildRef.bind(this);
     this.getJsonDefinition = this.getJsonDefinition.bind(this);
     this.processDragStart = this.processDragStart.bind(this);
