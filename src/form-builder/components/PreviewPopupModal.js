@@ -9,10 +9,16 @@ export default class PreviewPopupModal extends React.Component {
     this.save = this.save.bind(this);
   }
 
+    save() {
+        const form = this.props.formData;
+    }
+
   render() {
     if (this.props.showPreview && this.props.formData) {
         const metadata = JSON.parse(this.props.formData.resources[0].value);
         metadata.version=this.props.formData.version;
+        console.log(" Preview modal ",metadata);
+
         return (
         <div>
           <div className="dialog preview-container">
@@ -32,6 +38,11 @@ export default class PreviewPopupModal extends React.Component {
                     type="reset">
               Close
             </button>
+              <button className="success-btn preview-save-btn"
+                      onClick={this.save}
+                      type="reset">
+                  Save
+              </button>
           </div>
         </div>
       );
