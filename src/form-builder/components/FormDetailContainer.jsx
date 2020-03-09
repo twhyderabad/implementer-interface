@@ -28,7 +28,7 @@ export class FormDetailContainer extends Component {
   constructor(props) {
     super(props);
     this.timeoutId = undefined;
-    this.state = { formData: undefined, showModal: false, notification: {},
+    this.state = { formData: undefined, showModal: false, showPreview: false, notification: {},
       httpReceived: false, loading: true, formList: [],
       originalFormName: undefined, formEvents: {}, referenceVersion: undefined };
     this.setState = this.setState.bind(this);
@@ -136,8 +136,7 @@ export class FormDetailContainer extends Component {
   }
 
   onPreview() {
-    console.log('preview');
-    this.setState({ showModal: true });
+    this.setState({ showPreview: true });
   }
 
 
@@ -199,6 +198,10 @@ export class FormDetailContainer extends Component {
 
   closeFormModal() {
     this.setState({ showModal: false });
+  }
+
+  closePreview() {
+      this.setState({ showPreview: false });
   }
 
   openFormModal() {
@@ -430,8 +433,8 @@ export class FormDetailContainer extends Component {
               <div className="container-content-wrap">
                 <div className="container-content">
                     {this.showEditButton()}
-                  <PreviewPopupModal showModal={this.state.showModal}
-                                     closeModal={() => this.closeFormModal()}
+                  <PreviewPopupModal showPreview={this.state.showPreview}
+                                     closePreview={() => this.closePreview()}
                                      formData = {this.state.formData}
                   />
                   <FormDetail

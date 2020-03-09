@@ -102,3 +102,19 @@
     border-color: $gray400;
   }
 }
+
+.preview-container{
+  height: 600px;
+  width: 1000px;
+  padding: 30px;
+  .preview-close-btn{
+    float: right;
+    margin: 50px;
+  }
+  .preview-save-btn{
+    float: left;
+    margin: 50px;
+    color: #4b8048;
+  }
+}
+

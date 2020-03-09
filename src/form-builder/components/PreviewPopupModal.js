@@ -1,44 +1,36 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Container } from 'bahmni-form-controls';
+import { Container as Container} from 'bahmni-form-controls';
 
 export default class PreviewPopupModal extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = { close: false };
-    this.closeDialog = this.closeDialog.bind(this);
-    const metadata = {controls : [], id :{}, uuid : {}, name : {}, version :{}}
+    this.save = this.save.bind(this);
   }
-
-  closeDialog() {
-    this.props.closeModal();
-  }
-
 
   render() {
-    console.log('PreviewPopupModal', this.state);
-    if (this.props.showModal) {
-      return (
-
+    if (this.props.showPreview && this.props.formData) {
+        const metadata = JSON.parse(this.props.formData.resources[0].value);
+        metadata.version=this.props.formData.version;
+        return (
         <div>
-
-          <div className="dialog-wrapper"></div>
-          <div className="dialog area-height--dialog script-editor-container">
-            <h1>abcd</h1>
+          <div className="dialog preview-container">
             <div>
-              <Container collapse={false}
-                         locale="en"
-                         metadata={this.props.formData}
-                         observations={[]}
-
+              <Container
+              metadata={metadata}
+              collapse={false}
+              validate={false}
+              translations={undefined}
+              observations={[]}
+              patient={undefined}
+              validateForm={false}
               />
             </div>
-            <button className="btn"
-                    onClick={this.props.closeModal}
-                    type="reset"
-            >
-              Cancel
+            <button className="btn preview-close-btn"
+                    onClick={this.props.closePreview}
+                    type="reset">
+              Close
             </button>
           </div>
         </div>
@@ -51,8 +43,8 @@ export default class PreviewPopupModal extends React.Component {
 
 
 PreviewPopupModal.propTypes = {
-  closeModal: PropTypes.func.isRequired,
-  showModal: PropTypes.bool.isRequired,
+  closePreview: PropTypes.func.isRequired,
+  showPreview: PropTypes.bool.isRequired,
   formData: PropTypes.object
 };
 
