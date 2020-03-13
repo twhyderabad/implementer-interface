@@ -45,6 +45,8 @@
     border-top: 1px solid #dddddd;
   }
 
+
+
   &--no-header{
     -webkit-animation:.5s;
     animation: .5s;
@@ -63,8 +65,8 @@
   }
 
   .CodeMirror-sizer{
-    width: 450px !important;
-    min-width: 0 !important;
+    width: 450px ;
+    min-width: 0 ;
   }
 
   .CodeMirror-scroll{
@@ -73,9 +75,20 @@
 }
 
 .script-editor-container{
-  width: 450px;
+   width: 450px;
+ }
+
+.script-conditions-editor-container{
+  width: 1000px;
 }
 
+.form-details-1{
+  padding: 30px;
+  border-right: 1px solid #dddddd;
+}
+.form-details-2{
+  padding: 30px;
+}
 .CodeMirror-lint-tooltip{
-  z-index: 1002 !important;
+  z-index: 1002 ;
 }

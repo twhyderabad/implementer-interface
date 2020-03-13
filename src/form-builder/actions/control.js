@@ -19,6 +19,8 @@ export const formEventUpdate = (events) => ({ type: 'FORM_EVENT_CHANGED', events
 
 export const saveEventUpdate = (events) => ({ type: 'SAVE_EVENT_CHANGED', events });
 
+export const formConditionsEventUpdate = (events) => ({ type: 'FORM_CONDITIONS_CHANGED', events });
+
 export const removeControlProperties = () => ({ type: 'REMOVE_CONTROL_PROPERTIES' });
 
 export const focusControl = (id) => ({ type: 'FOCUS_CONTROL', id });

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { focusControl, selectControl, dragSourceUpdate } from 'form-builder/actions/control';
-import { blurControl, deselectControl, formEventUpdate, saveEventUpdate }
+import { blurControl, deselectControl, formEventUpdate, saveEventUpdate, formConditionsEventUpdate }
   from 'form-builder/actions/control';
 import { Draggable } from 'bahmni-form-controls';
 import { ComponentStore } from 'bahmni-form-controls';
@@ -17,6 +17,7 @@ import classNames from 'classnames';
 import DeleteControlModal from 'form-builder/components/DeleteControlModal.jsx';
 import ScriptEditorModal from './ScriptEditorModal';
 import DragDropHelper from '../helpers/dragDropHelper.js';
+import FormConditionsModal from 'form-builder/components/FormConditionsModal';
 
 export class ControlWrapper extends Draggable {
   constructor(props) {
@@ -162,11 +163,12 @@ export class ControlWrapper extends Draggable {
       this.props.dispatch(selectControl(this.metadata));
       this.props.dispatch(sourceChangedProperty(script));
     } else {
-      const isSaveEvent = properties.property.formSaveEvent;
-      if (isSaveEvent) {
+      if (properties.property.formSaveEvent) {
         this.props.dispatch(saveEventUpdate(script));
-      } else {
+      } else if (properties.property.formInitEvent) {
         this.props.dispatch(formEventUpdate(script));
+      } else {
+        this.props.dispatch(formConditionsEventUpdate(script));
       }
     }
     this.closeScriptEditorDialog(properties.id);
@@ -178,6 +180,7 @@ export class ControlWrapper extends Draggable {
     } else {
       this.props.dispatch(setChangedProperty({ formInitEvent: false }));
       this.props.dispatch(setChangedProperty({ formSaveEvent: false }));
+      this.props.dispatch(setChangedProperty({ formConditionsEvent: false }));
     }
   }
 
@@ -187,23 +190,48 @@ export class ControlWrapper extends Draggable {
       return selectedControl.events && selectedControl.events.onValueChange;
     }
     const formDetails = this.props.formDetails;
-    const isSaveEvent = properties.property.formSaveEvent;
+    // eslint-disable-next-line no-nested-ternary
+   /* const formEvent = properties.property.formSaveEvent ? formDetails.events.onFormSave
+                      : (properties.property.formInitEvent ? formDetails.events.onFormInit
+                      : formDetails.events.onFormConditionsUpdate);  */
+
+   /* return formDetails.events
+      && (formDetails.events.onFormSave
+        ? formDetails.events.onFormSave : formDetails.events.onFormInit); */
+
     return formDetails.events
-      && (isSaveEvent ? formDetails.events.onFormSave : formDetails.events.onFormInit);
+      // eslint-disable-next-line no-nested-ternary
+      && (properties.property.formSaveEvent ? formDetails.events.onFormSave
+        : (properties.property.formInitEvent ? formDetails.events.onFormInit
+          : formDetails.events.onFormConditionsUpdate));
   }
 
   showScriptEditorDialog() {
     const properties = this.props.controlProperty;
-    if (properties && properties.property &&
-      (properties.id === this.metadata.id && properties.property.controlEvent ||
-      !properties.id && (properties.property.formInitEvent || properties.property.formSaveEvent))) {
-      return (
-        <ScriptEditorModal
-          close={() => this.closeScriptEditorDialog(properties.id)}
-          script={this.getScript(properties)}
-          updateScript={(script) => this.updateScript(script, properties)}
-        />
-      );
+    const isFormEvent = properties.property && (properties.property.formInitEvent ||
+                        properties.property.formSaveEvent ||
+                        properties.property.formConditionsEvent);
+    if (properties && properties.property) {
+      if ((properties.id === this.metadata.id && properties.property.controlEvent) ||
+          (!properties.id && isFormEvent)) {
+        if (properties.property.formConditionsEvent) {
+          return (
+            <FormConditionsModal
+              close={() => this.closeScriptEditorDialog(properties.id)}
+              formTitle={properties.property.formTitle}
+              script={this.getScript(properties)}
+              updateScript={(script) => this.updateScript(script, properties)}
+            />
+          );
+        }
+        return (
+            <ScriptEditorModal
+              close={() => this.closeScriptEditorDialog(properties.id)}
+              script={this.getScript(properties)}
+              updateScript={(script) => this.updateScript(script, properties)}
+            />
+        );
+      }
     }
     return null;
   }
@@ -278,6 +306,7 @@ function mapStateToProps(state) {
     conceptToControlMap: state.conceptToControlMap,
     controlProperty: state.controlProperty,
     formDetails: state.formDetails,
+    formName: state.formName,
     focusedControl: state.controlDetails.focusedControl,
     selectedControl: state.controlDetails.selectedControl,
     dragSourceCell: state.controlDetails.dragSourceCell,
