@@ -7,6 +7,7 @@ import { getStore } from 'test/utils/storeHelper';
 import { Provider } from 'react-redux';
 import { ComponentStore } from 'bahmni-form-controls';
 import sinon from 'sinon';
+import * as FormEventEditor from 'form-builder/components/FormEventEditor.jsx';
 
 chai.use(chaiEnzyme());
 
@@ -14,6 +15,7 @@ describe('FormDetails', () => {
   let wrapper;
   let getDesignerComponentStub;
   let getAllDesignerComponentsStub;
+  let formEventEditorStub;
   const formData = {
     id: 1,
     name: 'someFormName',
@@ -34,11 +36,13 @@ describe('FormDetails', () => {
     });
     getAllDesignerComponentsStub = sinon.stub(ComponentStore, 'getAllDesignerComponents');
     getAllDesignerComponentsStub.returns({});
+    formEventEditorStub = sinon.stub(FormEventEditor, 'default').returns(<div>A stub</div>);
   });
 
   after(() => {
     getDesignerComponentStub.restore();
     getAllDesignerComponentsStub.restore();
+    formEventEditorStub.restore();
   });
 
   it('should render form details when form data is present', () => {
