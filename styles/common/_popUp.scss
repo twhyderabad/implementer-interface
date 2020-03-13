@@ -72,6 +72,7 @@
   }
 }
 
+
 .form-event-popup{
   &-content {
     width: 90vw !important; /* stylelint-disable-line declaration-no-important */
@@ -82,6 +83,19 @@
   }
 }
 
+.script-conditions-editor-container{
+  width: 1000px;
+}
+.form-details-1{
+  padding: 30px;
+  border-right: 1px solid #dddddd;
+}
+.form-details-2{
+  padding: 30px;
+}
+.form-details-2 .CodeMirror {
+  height: 155px;
+}
 .CodeMirror-lint-tooltip{
   z-index: 1002 !important; /* stylelint-disable-line declaration-no-important */
 }

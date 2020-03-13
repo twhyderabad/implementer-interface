@@ -60,6 +60,7 @@ export default class FormDetail extends Component {
       const { name, uuid, id, version, published, editable } = this.props.formData;
       const formResourceControls = FormHelper.getFormResourceControls(this.props.formData);
       const idGenerator = this.getIdGenerator(formResourceControls);
+
       const getScript = (property, formDetails) => {
         const isSaveEvent = property.formSaveEvent;
         return formDetails.events && (isSaveEvent ? formDetails.events.onFormSave
@@ -85,6 +86,9 @@ export default class FormDetail extends Component {
           }
        </div>);
       };
+
+      const formTitle = this.formTitle(name, version, published, editable);
+
       return (
                 <div>
                     <FormEventEditor children={<FormEventEditorContent />} />
@@ -93,7 +97,7 @@ export default class FormDetail extends Component {
                     <div className={ classNames('container-main',
                         { published: (published && !editable) }) }>
                         <h2 className="header-title">
-                            {this.formTitle(name, version, published, editable)}</h2>
+                            {formTitle}</h2>
                         <div className="container-columns">
                             <div className="column-side">
                                 <ControlPool
@@ -109,6 +113,12 @@ export default class FormDetail extends Component {
                                 <FormEventContainer
                                   eventProperty={'formSaveEvent'}
                                   label={'Save Event'}
+                                  updateFormEvents={this.props.updateFormEvents}
+                                />
+                                <FormEventContainer
+                                  eventProperty={'formConditionsEvent'}
+                                  formTitle={this.props.formData.name}
+                                  label={'Form Conditions'}
                                   updateFormEvents={this.props.updateFormEvents}
                                 />
                             </div>
