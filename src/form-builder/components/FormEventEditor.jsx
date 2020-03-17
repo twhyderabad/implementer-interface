@@ -35,7 +35,7 @@ FormEventEditor.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-  property: state.controlProperty.property,
+  property: state.controlProperty ? state.controlProperty.property : undefined,
   formDetails: state.formDetails,
 });
 

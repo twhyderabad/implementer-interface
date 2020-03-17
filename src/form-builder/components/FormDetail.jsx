@@ -65,13 +65,14 @@ export default class FormDetail extends Component {
         return formDetails.events && (isSaveEvent ? formDetails.events.onFormSave
           : formDetails.events.onFormInit);
       };
-      const FormEditorContent = (props) => {
+      const FormEventEditorContent = (props) => {
         const script = props.property ? getScript(props.property, props.formDetails) : '';
         const showEditor = props.property && (props.property.formInitEvent
           || props.property.formSaveEvent);
         return (<div>
           {showEditor &&
-          <Popup className="form-event-popup" closeOnDocumentClick={false} open={showEditor} position="top center" >
+          <Popup className="form-event-popup" closeOnDocumentClick={false}
+            open={showEditor} position="top center">
           <ScriptEditorModal close={props.closeEventEditor} script={script}
             updateScript={(scriptToUpdate) => {
               props.updateScript(scriptToUpdate);
@@ -84,7 +85,7 @@ export default class FormDetail extends Component {
       };
       return (
                 <div>
-                    <FormEventEditor children={<FormEditorContent />} />
+                    <FormEventEditor children={<FormEventEditorContent />} />
                     <div className="button-wrapper">
                     </div>
                     <div className={ classNames('container-main',
