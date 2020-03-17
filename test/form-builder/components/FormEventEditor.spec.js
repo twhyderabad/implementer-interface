@@ -26,9 +26,9 @@ describe('FormEventEditor', () => {
       <FormEventEditor
         children={<DummyComponent />}
         closeEventEditor={closeEventEditorSpy}
-        updateScript={updateScriptSpy}
         formDetails={formDetails}
         property={property}
+        updateScript={updateScriptSpy}
       />);
   });
 

@@ -7,15 +7,15 @@ import { getStore } from 'test/utils/storeHelper';
 import { Provider } from 'react-redux';
 import { ComponentStore } from 'bahmni-form-controls';
 import sinon from 'sinon';
-import * as Popup from 'reactjs-popup';
+import * as ScriptEditorModal from 'form-builder/components/ScriptEditorModal';
 
 chai.use(chaiEnzyme());
 
-describe.only('FormDetails', () => {
+describe('FormDetails', () => {
   let wrapper;
   let getDesignerComponentStub;
   let getAllDesignerComponentsStub;
-  let popUpStub;
+  let scriptEditorModalStub;
 
   const formData = {
     id: 1,
@@ -37,13 +37,13 @@ describe.only('FormDetails', () => {
     });
     getAllDesignerComponentsStub = sinon.stub(ComponentStore, 'getAllDesignerComponents');
     getAllDesignerComponentsStub.returns({});
-    popUpStub = sinon.stub(Popup, 'default').returns(<div>A stub</div>);
+    scriptEditorModalStub = sinon.stub(ScriptEditorModal, 'default').returns(<div>A stub</div>);
   });
 
   after(() => {
     getDesignerComponentStub.restore();
     getAllDesignerComponentsStub.restore();
-    popUpStub.restore();
+    scriptEditorModalStub.restore();
   });
 
   it('should render form details when form data is present', () => {
@@ -133,5 +133,93 @@ describe.only('FormDetails', () => {
     expect(controlPoolProps).to.have.property('idGenerator');
     expect(canvasProps).to.have.property('idGenerator');
     expect(canvasProps.idGenerator).to.be.equal(controlPoolProps.idGenerator);
+  });
+
+  it('should render popup when formSaveEvent is true', () => {
+    const property = { formSaveEvent: true };
+    const state = { controlProperty: { property }, formDetails: {}, controlDetails: {} };
+    const store = getStore(state);
+    wrapper = mount(
+      <Provider store={store}>
+        <FormDetail
+          formData={formData}
+          publishForm={() => {}}
+          saveFormResource={() => {}}
+          setError={() => {}}
+        />
+      </Provider>);
+
+    expect(wrapper.find('FormEventEditor').find('Popup').length).to.eq(1);
+  });
+
+  it('should render popup when formInitEvent is true', () => {
+    const property = { formInitEvent: true };
+    const state = { controlProperty: { property }, formDetails: {}, controlDetails: {} };
+    const store = getStore(state);
+    wrapper = mount(
+      <Provider store={store}>
+        <FormDetail
+          formData={formData}
+          publishForm={() => {}}
+          saveFormResource={() => {}}
+          setError={() => {}}
+        />
+      </Provider>);
+
+    expect(wrapper.find('FormEventEditor').find('Popup').length).to.eq(1);
+  });
+
+  it('should not render popup when formInitEvent and formSaveEvent are false', () => {
+    const property = { formInitEvent: false, formSaveEvent: false };
+    const state = { controlProperty: { property }, formDetails: {}, controlDetails: {} };
+    const store = getStore(state);
+    wrapper = mount(
+      <Provider store={store}>
+        <FormDetail
+          formData={formData}
+          publishForm={() => {}}
+          saveFormResource={() => {}}
+          setError={() => {}}
+        />
+      </Provider>);
+    expect(wrapper.find('FormEventEditor').find('Popup').length).to.eq(0);
+  });
+
+  it('should render script of onFormSave when formSaveEvent is true', () => {
+    const dummyScript = 'function abcd(){ var a=1;}';
+    const property = { formSaveEvent: true };
+    const state = { controlProperty: { property },
+      formDetails: { events: { onFormSave: dummyScript } }, controlDetails: {} };
+    const store = getStore(state);
+    wrapper = mount(
+      <Provider store={store}>
+        <FormDetail
+          formData={formData}
+          publishForm={() => {}}
+          saveFormResource={() => {}}
+          setError={() => {}}
+        />
+      </Provider>);
+    expect(wrapper.find('FormEventEditor').find('Popup').find('default')
+      .prop('script')).to.eq(dummyScript);
+  });
+
+  it('should render script of onFormInit when formInitEvent is true', () => {
+    const dummyScript = 'function abcd(){ var a=1;}';
+    const property = { formInitEvent: true };
+    const state = { controlProperty: { property },
+      formDetails: { events: { onFormInit: dummyScript } }, controlDetails: {} };
+    const store = getStore(state);
+    wrapper = mount(
+      <Provider store={store}>
+        <FormDetail
+          formData={formData}
+          publishForm={() => {}}
+          saveFormResource={() => {}}
+          setError={() => {}}
+        />
+      </Provider>);
+    expect(wrapper.find('FormEventEditor').find('Popup').find('default')
+      .prop('script')).to.eq(dummyScript);
   });
 });
