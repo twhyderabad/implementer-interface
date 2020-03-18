@@ -9,9 +9,10 @@ export default class PreviewPopupModal extends React.Component {
     super(props);
     this.state = {
         formData: {},
-        observations:{observations: []}};
+        observations:[],
+        records: {}};
     this.save = this.save.bind(this);
-    this.updateForm = this.updateForm.bind(this);
+    this.formUpdated = this.formUpdated.bind(this);
   }
 
     save() {
@@ -29,16 +30,25 @@ export default class PreviewPopupModal extends React.Component {
                 onFormSave: metadata.events.onFormSave
             }
         };
-        this.setState({formData: runScript(this.state.formData)});
+        const temp = runScript(form);
+        const obs = getObservations(temp);
+        console.log('SAVE RENDERED', temp);
+        this.setState({observations:obs});
+        this.setState({state: this.state});
+        this.setState({records: temp});
+        // this.setState({formData: runScript(form)});
     }
 
-    updateForm(updatedForm, obs) {
+    formUpdated(updatedForm, obs) {
+        console.log(" for update ", obs);
         this.setState({formData: updatedForm});
         this.setState({observations: obs});
     }
 
   render() {
+      console.log('rendered');
     if (this.props.showPreview && this.props.formData) {
+        console.log("rendering ",this.state.observations);
         const metadata = JSON.parse(this.props.formData.resources[0].value);
         metadata.version=this.props.formData.version;
         return (
@@ -47,13 +57,14 @@ export default class PreviewPopupModal extends React.Component {
             <div>
               <Container
               metadata={metadata}
-              collapse={false}
-              validate={false}
+              collapse={true}
+              validate={true}
               translations={undefined}
-              observations={this.state.observations.observations}
+              observations={this.state.observations}
               patient={undefined}
-              validateForm={false}
-              updateForm={this.updateForm}
+              validateForm={true}
+              valueChanged={this.formUpdated}
+              records={this.state.records}
               />
             </div>
             <button className="btn preview-close-btn"
