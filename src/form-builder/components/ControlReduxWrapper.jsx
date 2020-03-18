@@ -198,9 +198,9 @@ export class ControlWrapper extends Draggable {
     if (properties && properties.property &&
       (properties.id === this.metadata.id && properties.property.controlEvent)) {
       return (
-        <Popup className="form-event-popup" closeOnDocumentClick={false}
+        <Popup className="form-event-popup"
           open={properties.id === this.metadata.id && properties.property.controlEvent}
-          position="top center"
+          position="top center" closeOnDocumentClick={false}
         >
         <ScriptEditorModal
           close={() => this.closeScriptEditorDialog(properties.id)}
