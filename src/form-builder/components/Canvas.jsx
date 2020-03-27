@@ -112,6 +112,7 @@ Canvas.propTypes = {
   dragSourceCell: PropTypes.object,
   formId: PropTypes.number,
   formName: PropTypes.string.isRequired,
+  formObsControls: PropTypes.array,
   formResourceControls: PropTypes.array.isRequired,
   formUuid: PropTypes.string.isRequired,
   idGenerator: PropTypes.object.isRequired,

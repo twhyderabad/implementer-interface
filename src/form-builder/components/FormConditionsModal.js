@@ -19,25 +19,66 @@ export default class FormConditionsModal extends Component {
   // eslint-disable-next-line no-useless-constructor
   constructor(props) {
     super(props);
+    this.state = { selectedControlEventTitle: undefined, selectedControlScript: undefined };
+    this.setState = this.setState.bind(this);
+    this.selectedControlOption = undefined;
+    this.prevSelectedControlOption = undefined;
+    this.selectedControlTitle = undefined;
+    this.selectedControlScript = undefined;
+    this.key = null;
+    this.updateSelectedOption = this.updateSelectedOption.bind(this);
   }
 
   componentDidMount() {
 
   }
+  // eslint-disable-next-line react/sort-comp
+  updateSelectedOption(element) {
+    this.prevSelectedControlOption = this.selectedControlOption;
+    this.selectedControlOption = element.target.value;
+    const selectedControlEventObj = this.props.controlEvents.find(control =>
+      control.id === this.selectedControlOption);
+    const selectedControlScriptObj = selectedControlEventObj ?
+      selectedControlEventObj.events : undefined;
+    this.selectedControlTitle = !selectedControlEventObj ? undefined
+      : `Control Id: ${selectedControlEventObj.id}    Control Name: ${
+      selectedControlEventObj.concept.name}`;
+    // this.setState({ selectedControlEventTitle: controlEventTitle });
+    this.selectedControlScript = selectedControlScriptObj ?
+      selectedControlScriptObj.onValueChange : undefined;
+    // this.setState({ selectedControlScript: controlScript });
+    if (this.selectedControlOption !== this.prevSelectedControlOption) {
+      // eslint-disable-next-line react/no-did-update-set-state
+      this.setState({ selectedControlEventTitle: this.selectedControlTitle });
+      // eslint-disable-next-line react/no-did-update-set-state
+      this.setState({ selectedControlScript: this.selectedControlScript });
+    }
+  }
+
+  // eslint-disable-next-line no-unused-vars
+  /* componentDidUpdate(prevProps) {
+    if (this.selectedControlOption !== this.prevSelectedControlOption) {
+      // eslint-disable-next-line react/no-did-update-set-state
+      this.setState({ selectedControlEventTitle: this.selectedControlTitle });
+      // eslint-disable-next-line react/no-did-update-set-state
+      this.setState({ selectedControlEventTitle: this.selectedControlTitle });
+    }
+  } */
+  showControlEventScript() {
+    if (this.state.selectedControlEventTitle !== undefined) {
+      return (<ScriptEditorComponentModal
+        close={this.props.close}
+        script={this.state.selectedControlScript}
+        selectedControlOption={this.selectedControlOption}
+        title={this.state.selectedControlEventTitle}
+        updateScript={this.props.updateScript}
+      />
+      );
+    }
+    return null;
+  }
   render() {
-    // eslint-disable-next-line no-unused-vars
-    const controlEvents = {
-      values: [
-        {
-          id: 0,
-          name: 'Control Event 1',
-        },
-        {
-          id: 1,
-          name: 'Control Event 2',
-        },
-      ],
-    };
+    const controlEvents = this.props.controlEvents !== undefined ? this.props.controlEvents : [];
     return (
       <div>
         <div className="dialog-wrapper"></div>
@@ -48,13 +89,15 @@ export default class FormConditionsModal extends Component {
               <br />
               <ScriptEditorComponentModal
                 close={this.props.close}
-                event={{ name: 'Form Event' }}
+                script={this.props.formDetails.events.onFormInit}
+                title={'Form Event'}
                 updateScript={this.props.updateScript}
               />
               <br />
               <ScriptEditorComponentModal
                 close={this.props.close}
-                event={{ name: 'Save Event' }}
+                script={this.props.formDetails.events.onFormSave}
+                title={ 'Save Event' }
                 updateScript={this.props.updateScript}
               />
               <br />
@@ -63,22 +106,19 @@ export default class FormConditionsModal extends Component {
              <br />
              <div>
                <label style={{ width: '20%', float: 'left' }}>Control Events:</label>
-               <select style={{ marginLeft: '20%', width: '40%' }}>
-                 { controlEvents.values.map((e) => <option key={e.id} >{e.name}</option>)}
+               <select onChange={this.updateSelectedOption}
+                 style={{ float: 'right', width: '40%' }}
+               >
+                 <option key="0" value="0">Select Option</option>
+                 {controlEvents.map((e) =>
+                   <option key={e.id} value={e.id} >{e.concept.name}</option>)}
                </select>
-               <button style={{ float: 'right' }}>Show</button>
              </div><br /><br />
               {
-                controlEvents.values.map((e) =>
-                  <div>
-                    <ScriptEditorComponentModal
-                      close={this.props.close}
-                      event={e}
-                      updateScript={this.props.updateScript}
-                    />
-                    <br /><br />
-                  </div>
-                )
+                <div>
+                  {this.showControlEventScript()}
+                  <br /><br />
+                </div>
               }
             </div>
           </div>
@@ -99,7 +139,13 @@ export default class FormConditionsModal extends Component {
 
 FormConditionsModal.propTypes = {
   close: PropTypes.func.isRequired,
+  controlEvents: PropTypes.array,
+  formDetails: PropTypes.shape({
+    events: PropTypes.object,
+  }),
   script: PropTypes.string,
+  selectedControlEventTitle: PropTypes.string,
+  selectedControlScript: PropTypes.string,
   updateScript: PropTypes.func.isRequired,
 };
 

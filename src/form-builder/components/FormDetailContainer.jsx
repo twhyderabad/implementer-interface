@@ -7,8 +7,8 @@ import FormDetail from 'form-builder/components/FormDetail.jsx';
 import FormBuilderHeader from 'form-builder/components/FormBuilderHeader.jsx';
 import FormBuilderBreadcrumbs from 'form-builder/components/FormBuilderBreadcrumbs.jsx';
 import { connect } from 'react-redux';
-import { blurControl, deselectControl, removeControlProperties, removeSourceMap }
-    from 'form-builder/actions/control';
+import { blurControl, deselectControl, formLoad, removeControlProperties, removeSourceMap }
+  from 'form-builder/actions/control';
 import NotificationContainer from 'common/Notification';
 import Spinner from 'common/Spinner';
 import EditModal from 'form-builder/components/EditModal.jsx';
@@ -29,7 +29,7 @@ export class FormDetailContainer extends Component {
     super(props);
     this.timeoutId = undefined;
     this.state = { formData: undefined, showModal: false, notification: {},
-      httpReceived: false, loading: true, formList: [],
+      httpReceived: false, loading: true, formList: [], formControls: [],
       originalFormName: undefined, formEvents: {}, referenceVersion: undefined };
     this.setState = this.setState.bind(this);
     this.setErrorMessage = this.setErrorMessage.bind(this);
@@ -54,7 +54,10 @@ export class FormDetailContainer extends Component {
             .then((data) => {
               this.setState({ formData: data, httpReceived: true,
                 loading: false, originalFormName: data.name, referenceVersion: data.version });
-              this.getFormJson();
+              const formJson = this.getFormJson();
+              const formControlsArray = formJson ? formJson.controls : [];
+              this.setState({ formControls: formControlsArray });
+              this.props.dispatch(formLoad(formControlsArray));
             })
             .catch((error) => {
               this.setErrorMessage(error);
@@ -418,6 +421,7 @@ export class FormDetailContainer extends Component {
                   <FormDetail
                     defaultLocale={defaultLocale}
                     formData={this.state.formData}
+                    formObsControls = {this.state.formControls}
                     ref={r => { this.formDetail = r; }}
                     setError={this.setErrorMessage}
                     updateFormEvents={(events) => this.updateFormEvents(events)}

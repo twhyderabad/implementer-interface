@@ -161,7 +161,7 @@ export class ControlWrapper extends Draggable {
   updateScript(script, properties) {
     if (properties.id) {
       this.props.dispatch(selectControl(this.metadata));
-      this.props.dispatch(sourceChangedProperty(script));
+      this.props.dispatch(sourceChangedProperty(script,properties.id));
     } else {
       if (properties.property.formSaveEvent) {
         this.props.dispatch(saveEventUpdate(script));
@@ -218,6 +218,8 @@ export class ControlWrapper extends Draggable {
           return (
             <FormConditionsModal
               close={() => this.closeScriptEditorDialog(properties.id)}
+              controlEvents={this.props.allControls}
+              formDetails={this.props.formDetails}
               formTitle={properties.property.formTitle}
               script={this.getScript(properties)}
               updateScript={(script) => this.updateScript(script, properties)}
@@ -309,6 +311,7 @@ function mapStateToProps(state) {
     formName: state.formName,
     focusedControl: state.controlDetails.focusedControl,
     selectedControl: state.controlDetails.selectedControl,
+    allControls: state.controlDetails.allControls,
     dragSourceCell: state.controlDetails.dragSourceCell,
   };
 }
