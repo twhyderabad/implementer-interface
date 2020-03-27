@@ -40,6 +40,7 @@ FormEventContainer.propTypes = {
   dispatch: PropTypes.func,
   eventProperty: PropTypes.string,
   formDetails: PropTypes.object,
+  formObsControls: PropTypes.array,
   formTitle: PropTypes.string,
   label: PropTypes.string,
   updateFormEvents: PropTypes.func,

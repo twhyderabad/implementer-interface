@@ -11,7 +11,7 @@ export const addSourceMap = (sourceMap) => ({ type: 'ADD_SOURCE_MAP', sourceMap 
 export const setChangedProperty = (property, id) =>
   ({ type: 'SET_CHANGED_PROPERTY', property, id });
 
-export const sourceChangedProperty = (source) => ({ type: 'SOURCE_CHANGED', source });
+export const sourceChangedProperty = (source, id) => ({ type: 'SOURCE_CHANGED', source, id });
 
 export const dragSourceUpdate = (cell) => ({ type: 'DRAG_SOURCE_CHANGED', cell });
 
@@ -37,3 +37,5 @@ export const removeLocaleTranslation =
   (locale) => ({ type: 'REMOVE_LOCALE_TRANSLATIONS', locale });
 
 export const clearTranslations = () => ({ type: 'CLEAR_TRANSLATIONS' });
+
+export const formLoad = (controls) => ({ type: 'FORM_LOAD', controls });

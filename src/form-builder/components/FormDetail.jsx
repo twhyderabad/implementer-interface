@@ -117,6 +117,7 @@ export default class FormDetail extends Component {
                                 />
                                 <FormEventContainer
                                   eventProperty={'formConditionsEvent'}
+                                  formObsControls={this.props.formObsControls}
                                   formTitle={this.props.formData.name}
                                   label={'Form Conditions'}
                                   updateFormEvents={this.props.updateFormEvents}
@@ -128,6 +129,7 @@ export default class FormDetail extends Component {
                                       defaultLocale={defaultLocale}
                                       formId={id}
                                       formName={name}
+                                      formObsControls={this.props.formObsControls}
                                       formResourceControls={formResourceControls}
                                       formUuid={ uuid }
                                       idGenerator={idGenerator}
@@ -158,6 +160,7 @@ FormDetail.propTypes = {
     version: PropTypes.string.isRequired,
     editable: PropTypes.bool,
   }),
+  formObsControls: PropTypes.array,
   setError: PropTypes.func.isRequired,
   updateFormEvents: PropTypes.func,
   updateFormName: PropTypes.func,

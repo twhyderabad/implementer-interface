@@ -21,25 +21,37 @@ export default class ScriptEditorComponentModal extends Component {
   constructor(props) {
     super(props);
     this.validateScript = this.validateScript.bind(this);
-    this.state = { script: this.props.script, notification: {}, codeMirrorEditor: {} };
+    this.state = { notification: {}, codeMirrorEditor: {} };
     this.codeMirrorEditor = null;
     this.scriptEditorTextArea = null;
+    this.prevScriptEditorTextArea = null;
     this.setScriptEditorTextArea = element => {
       this.scriptEditorTextArea = element;
     };
     this.format = this.format.bind(this);
   }
 
+
   componentDidMount() {
     const scriptEditorTextArea = this.scriptEditorTextArea;
-    this.codeMirrorEditor = CodeMirror.fromTextArea(scriptEditorTextArea, {
-      mode: { name: 'javascript', globalVars: true },
-      autoCloseBrackets: true,
-      readOnly: true,
-      indentWithTabs: true,
-      tabSize: 2,
-    });
+    if (scriptEditorTextArea !== null) {
+      this.codeMirrorEditor = CodeMirror.fromTextArea(scriptEditorTextArea, {
+        mode: { name: 'javascript', globalVars: true },
+        autoCloseBrackets: true,
+        readOnly: true,
+        indentWithTabs: true,
+        tabSize: 2,
+      });
+    }
   }
+  componentDidUpdate() {
+    if (this.prevScriptEditorTextArea !== this.props.script) {
+      const script = this.props.script === undefined ? '' : this.props.script;
+      this.codeMirrorEditor.setValue(script);
+      this.prevScriptEditorTextArea = script;
+    }
+  }
+
 
   validateScript() {
     try {
@@ -68,17 +80,16 @@ export default class ScriptEditorComponentModal extends Component {
   }
 
   render() {
-    let eventLabel = '';
-    if (this.props.event.id !== undefined) {
-      eventLabel = `Control ID:${this.props.event.id}   Name:`;
+    if (this.props.title === undefined) {
+      return null;
     }
-    eventLabel = eventLabel + this.props.event.name;
+    // eslint-disable-next-line consistent-return
     return (
       <div style={{ paddingLeft: '10px' }}>
-        <label>{eventLabel}</label><br />
-        <div className="comp1" style={{ 'border-style': 'solid', 'border-width': 'thin' }}>
+        <label style={{ fontWeight: 'bold' }}>{this.props.title}</label><br /><br />
+        <div className="comp1" style={{ borderStyle: 'solid', borderWidth: 'thin' }}>
           <textarea autoFocus className="editor-wrapper area-height--textarea"
-            defaultValue={this.state.script} ref={this.setScriptEditorTextArea}
+            defaultValue={this.props.script} ref={this.setScriptEditorTextArea}
           >
           </textarea>
         </div>
@@ -89,14 +100,8 @@ export default class ScriptEditorComponentModal extends Component {
 
 ScriptEditorComponentModal.propTypes = {
   close: PropTypes.func.isRequired,
-  event: {
-    id: PropTypes.any,
-    name: PropTypes.string,
-  },
   script: PropTypes.string,
+  title: PropTypes.string,
   updateScript: PropTypes.func.isRequired,
 };
 
-ScriptEditorComponentModal.defaultProps = {
-  script: '',
-};
