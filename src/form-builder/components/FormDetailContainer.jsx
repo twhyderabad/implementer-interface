@@ -319,7 +319,7 @@ export class FormDetailContainer extends Component {
       position="top center"
     >
       <FormPreviewModal close={() => this.closePreview()}
-        formJson={this.state.formPreviewJson}
+        formJson={this.state.formPreviewJson} setErrorMessage={this.setErrorMessage}
       />
     </Popup>);
   }
