@@ -6,13 +6,15 @@ const controlDetails = (store = {}, action) => {
       let storeClone;
 
       if (store.allControls === undefined) {
-        storeClone = Object.assign({}, store, { allControls: [action.metadata] });
+        storeClone = Object.assign({}, store, { allControls: [{ id: action.metadata.id,
+          name: action.metadata.concept.name, events: action.metadata.events }] });
         // eslint-disable-next-line no-else-return
       } else {
         storeClone = store;
         storeClone.allControls = storeClone.allControls.filter(control =>
           control.id !== action.metadata.id);
-        storeClone.allControls = storeClone.allControls.concat(action.metadata);
+        storeClone.allControls = storeClone.allControls.concat({ id: action.metadata.id,
+          name: action.metadata.concept.name, events: action.metadata.events });
       }
       return Object.assign({}, storeClone, { selectedControl: action.metadata });
     case 'DESELECT_CONTROL':
@@ -33,7 +35,9 @@ const controlDetails = (store = {}, action) => {
       return cloneDeep(store);
 
     case 'FORM_LOAD':
-      return Object.assign({}, store, { allControls: action.controls });
+      return Object.assign({}, store, { allControls:
+          action.controls.map(e => ({ id: e.id,
+            name: e.concept.name, events: e.events })) });
     case 'DRAG_SOURCE_CHANGED':
       return Object.assign({}, store, { dragSourceCell: action.cell });
 

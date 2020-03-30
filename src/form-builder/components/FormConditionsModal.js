@@ -16,7 +16,6 @@ import ScriptEditorComponentModal from 'form-builder/components/ScriptEditorComp
 window.JSHINT = JSHINT;
 
 export default class FormConditionsModal extends Component {
-  // eslint-disable-next-line no-useless-constructor
   constructor(props) {
     super(props);
     this.state = { selectedControlEventTitle: undefined, selectedControlScript: undefined };
@@ -25,14 +24,13 @@ export default class FormConditionsModal extends Component {
     this.prevSelectedControlOption = undefined;
     this.selectedControlTitle = undefined;
     this.selectedControlScript = undefined;
-    this.key = null;
     this.updateSelectedOption = this.updateSelectedOption.bind(this);
   }
 
   componentDidMount() {
 
   }
-  // eslint-disable-next-line react/sort-comp
+
   updateSelectedOption(element) {
     this.prevSelectedControlOption = this.selectedControlOption;
     this.selectedControlOption = element.target.value;
@@ -42,28 +40,15 @@ export default class FormConditionsModal extends Component {
       selectedControlEventObj.events : undefined;
     this.selectedControlTitle = !selectedControlEventObj ? undefined
       : `Control Id: ${selectedControlEventObj.id}    Control Name: ${
-      selectedControlEventObj.concept.name}`;
-    // this.setState({ selectedControlEventTitle: controlEventTitle });
+      selectedControlEventObj.name}`;
     this.selectedControlScript = selectedControlScriptObj ?
       selectedControlScriptObj.onValueChange : undefined;
-    // this.setState({ selectedControlScript: controlScript });
     if (this.selectedControlOption !== this.prevSelectedControlOption) {
-      // eslint-disable-next-line react/no-did-update-set-state
       this.setState({ selectedControlEventTitle: this.selectedControlTitle });
-      // eslint-disable-next-line react/no-did-update-set-state
       this.setState({ selectedControlScript: this.selectedControlScript });
     }
   }
 
-  // eslint-disable-next-line no-unused-vars
-  /* componentDidUpdate(prevProps) {
-    if (this.selectedControlOption !== this.prevSelectedControlOption) {
-      // eslint-disable-next-line react/no-did-update-set-state
-      this.setState({ selectedControlEventTitle: this.selectedControlTitle });
-      // eslint-disable-next-line react/no-did-update-set-state
-      this.setState({ selectedControlEventTitle: this.selectedControlTitle });
-    }
-  } */
   showControlEventScript() {
     if (this.state.selectedControlEventTitle !== undefined) {
       return (<ScriptEditorComponentModal
@@ -85,7 +70,7 @@ export default class FormConditionsModal extends Component {
         <div className="dialog area-height--dialog script-conditions-editor-container">
           <h2 className="header-title">Form Conditions Modal</h2>
           <div style={{ width: '100%', height: '90%' }}>
-            <div className="form-details-1" style={{ width: '50%', float: 'left' }}>
+            <div className="form-conditions-left-panel" style={{ width: '50%', float: 'left' }}>
               <br />
               <ScriptEditorComponentModal
                 close={this.props.close}
@@ -102,31 +87,22 @@ export default class FormConditionsModal extends Component {
               />
               <br />
             </div>
-            <div className="form-details-2" style={{ marginLeft: '50%' }}>
+            <div className="form-conditions-right-panel" style={{ marginLeft: '50%' }}>
              <br />
              <div>
-               <label style={{ width: '20%', float: 'left' }}>Control Events:</label>
-               <select onChange={this.updateSelectedOption}
-                 style={{ float: 'right', width: '40%' }}
-               >
+               <label style={{ float: 'left', fontWeight: 'bolder' }}>Control Events:</label>
+               <select onChange={this.updateSelectedOption} style={{ float: 'right' }} >
                  <option key="0" value="0">Select Option</option>
-                 {controlEvents.map((e) =>
-                   <option key={e.id} value={e.id} >{e.concept.name}</option>)}
+                 {controlEvents.map((e) => <option key={e.id} value={e.id} >{e.name}</option>)}
                </select>
-             </div><br /><br />
+             </div><br /><br /><br /><br />
               {
-                <div>
-                  {this.showControlEventScript()}
-                  <br /><br />
-                </div>
+                <div> {this.showControlEventScript()}<br /><br /> </div>
               }
             </div>
           </div>
           <div className="script-editor-button-wrapper" >
-            <button className="btn"
-              onClick={() => this.props.close()}
-              type="reset"
-            >
+            <button className="btn" onClick={() => this.props.close()} type="reset">
               Cancel
             </button>
           </div>

@@ -1,7 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { formEventUpdate, saveEventUpdate, setChangedProperty } from 'form-builder/actions/control';
+import {
+  formConditionsEventUpdate,
+  formEventUpdate,
+  saveEventUpdate,
+  setChangedProperty,
+} from 'form-builder/actions/control';
 
 export const FormEventEditor = (props) => {
   const { property, formDetails, closeEventEditor } = props;
@@ -24,11 +29,13 @@ FormEventEditor.propTypes = {
     events: PropTypes.shape({
       onFormInit: PropTypes.string,
       onFormSave: PropTypes.string,
+      onFormConditionsUpdate: PropTypes.string,
     }),
   }),
   property: PropTypes.shape({
     formInitEvent: PropTypes.bool,
     formSaveEvent: PropTypes.bool,
+    formConditionsEvent: PropTypes.bool,
   }),
   updateScript: PropTypes.func.isRequired,
 
@@ -43,13 +50,15 @@ const mapDispatchToProps = (dispatch) => ({
   closeEventEditor: () => {
     dispatch(setChangedProperty({ formInitEvent: false }));
     dispatch(setChangedProperty({ formSaveEvent: false }));
+    dispatch(setChangedProperty({ formConditionsEvent: false }));
   },
   updateScript: (script, property) => {
-    const isSaveEvent = property.formSaveEvent;
-    if (isSaveEvent) {
+    if (property.formSaveEvent) {
       dispatch(saveEventUpdate(script));
-    } else {
+    } else if (property.formInitEvent) {
       dispatch(formEventUpdate(script));
+    } else if (property.formConditionsEvent) {
+      dispatch(formConditionsEventUpdate(script));
     }
   },
 });

@@ -31,7 +31,6 @@ export default class ScriptEditorComponentModal extends Component {
     this.format = this.format.bind(this);
   }
 
-
   componentDidMount() {
     const scriptEditorTextArea = this.scriptEditorTextArea;
     if (scriptEditorTextArea !== null) {
@@ -86,7 +85,7 @@ export default class ScriptEditorComponentModal extends Component {
     // eslint-disable-next-line consistent-return
     return (
       <div style={{ paddingLeft: '10px' }}>
-        <label style={{ fontWeight: 'bold' }}>{this.props.title}</label><br /><br />
+        <label style={{ fontWeight: 'bolder' }}>{this.props.title}</label><br /><br />
         <div className="comp1" style={{ borderStyle: 'solid', borderWidth: 'thin' }}>
           <textarea autoFocus className="editor-wrapper area-height--textarea"
             defaultValue={this.props.script} ref={this.setScriptEditorTextArea}

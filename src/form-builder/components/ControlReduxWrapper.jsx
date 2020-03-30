@@ -191,22 +191,16 @@ export class ControlWrapper extends Draggable {
       return selectedControl.events && selectedControl.events.onValueChange;
     }
     const formDetails = this.props.formDetails;
-    // eslint-disable-next-line no-nested-ternary
-   /* const formEvent = properties.property.formSaveEvent ? formDetails.events.onFormSave
-                      : (properties.property.formInitEvent ? formDetails.events.onFormInit
-                      : formDetails.events.onFormConditionsUpdate);  */
 
-   /* return formDetails.events
-      && (formDetails.events.onFormSave
-        ? formDetails.events.onFormSave : formDetails.events.onFormInit); */
-
-    return formDetails.events
+    return formDetails.events &&
       // eslint-disable-next-line no-nested-ternary
-      && (properties.property.formSaveEvent ? formDetails.events.onFormSave
+       (properties.property.formSaveEvent ? formDetails.events.onFormSave
         : (properties.property.formInitEvent ? formDetails.events.onFormInit
-          : formDetails.events.onFormConditionsUpdate));
+          : formDetails.events.onFormConditionsUpdate)
+       );
   }
 
+  /*
   showScriptEditorDialog() {
     const properties = this.props.controlProperty;
     const isFormEvent = properties.property && (properties.property.formInitEvent ||
@@ -246,13 +240,12 @@ export class ControlWrapper extends Draggable {
               updateScript={(script) => this.updateScript(script, properties)}
             />
           </Popup>
-
         );
       }
     }
     return null;
   }
-
+*/
   handleDragStart(e, onDragStart) {
     this.setState({ isBeingDragged: true });
     this.props.dispatch(dragSourceUpdate(this.props.parentRef));
@@ -296,7 +289,6 @@ export class ControlWrapper extends Draggable {
 
         />
         { this.showDeleteControlModal() }
-        { this.showScriptEditorDialog() }
       </div>
     );
   }
@@ -326,7 +318,6 @@ function mapStateToProps(state) {
     formName: state.formName,
     focusedControl: state.controlDetails.focusedControl,
     selectedControl: state.controlDetails.selectedControl,
-    allControls: state.controlDetails.allControls,
     dragSourceCell: state.controlDetails.dragSourceCell,
   };
 }

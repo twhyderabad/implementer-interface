@@ -484,7 +484,9 @@ export class FormDetailContainer extends Component {
                     {this.showPreviewModal()}
                   <FormDetail
                     defaultLocale={defaultLocale}
+                    formControlEvents={this.props.formControlEvents}
                     formData={this.state.formData}
+                    formDetails={this.props.formDetails}
                     formObsControls = {this.state.formControls}
                     ref={r => { this.formDetail = r; }}
                     setError={this.setErrorMessage}
@@ -502,6 +504,10 @@ export class FormDetailContainer extends Component {
 FormDetailContainer.propTypes = {
   defaultLocale: PropTypes.string,
   dispatch: PropTypes.func,
+  formControlEvents: PropTypes.array,
+  formDetails: PropTypes.shape({
+    events: PropTypes.object,
+  }),
   match: PropTypes.shape({
     path: PropTypes.string.isRequired,
     url: PropTypes.string.isRequired,
@@ -520,6 +526,8 @@ function mapStateToProps(state) {
   return {
     defaultLocale: state.formDetails && state.formDetails.defaultLocale,
     translations: state.translations,
+    formDetails: state.formDetails,
+    formControlEvents: state.controlDetails.allControls,
   };
 }
 
