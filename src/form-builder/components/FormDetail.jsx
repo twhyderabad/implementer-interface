@@ -61,6 +61,7 @@ export default class FormDetail extends Component {
       const formResourceControls = FormHelper.getFormResourceControls(this.props.formData);
       const idGenerator = this.getIdGenerator(formResourceControls);
 
+
       const getScript = (property, formDetails) => {
         const isSaveEvent = property.formSaveEvent;
         return formDetails.events && (isSaveEvent ? formDetails.events.onFormSave
@@ -88,7 +89,6 @@ export default class FormDetail extends Component {
       };
 
       const formTitle = this.formTitle(name, version, published, editable);
-
       return (
                 <div>
                     <FormEventEditor children={<FormEventEditorContent />} />

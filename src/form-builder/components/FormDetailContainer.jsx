@@ -66,6 +66,7 @@ export class FormDetailContainer extends Component {
                 loading: false, originalFormName: data.name,
                 referenceVersion: parsedFormValue.referenceVersion,
                 referenceFormUuid: parsedFormValue.referenceFormUuid });
+
               const formJson = this.getFormJson();
               const formControlsArray = formJson ? formJson.controls : [];
               this.setState({ formControls: formControlsArray });

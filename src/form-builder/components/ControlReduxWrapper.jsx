@@ -209,7 +209,6 @@ export class ControlWrapper extends Draggable {
 
   showScriptEditorDialog() {
     const properties = this.props.controlProperty;
-
     const isFormEvent = properties.property && (properties.property.formInitEvent ||
                         properties.property.formSaveEvent ||
                         properties.property.formConditionsEvent);
@@ -240,12 +239,14 @@ export class ControlWrapper extends Draggable {
             open={properties.id === this.metadata.id && properties.property.controlEvent}
             position="top center"
           >
+
             <ScriptEditorModal
               close={() => this.closeScriptEditorDialog(properties.id)}
               script={this.getScript(properties)}
               updateScript={(script) => this.updateScript(script, properties)}
             />
           </Popup>
+
         );
       }
     }

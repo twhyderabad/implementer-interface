@@ -39,6 +39,16 @@
     margin: 0 10px 0 0;
   }
 
+
+  .script-editor-button-wrapper{
+    background: #f7f7f7;
+    padding: 10px;
+    text-align: right;
+    border-top: 1px solid #dddddd;
+  }
+
+
+
   &--no-header{
     -webkit-animation:.5s;
     animation: .5s;
@@ -64,6 +74,11 @@
     margin: 0 10px 0 0;
   }
 
+  .CodeMirror-sizer{
+    width: 450px ;
+    min-width: 0 ;
+  }
+
   .script-editor-button-wrapper{
     background: #f7f7f7;
     padding: 10px;
@@ -71,7 +86,6 @@
     border-top: 1px solid #dddddd;
   }
 }
-
 
 .form-event-popup{
   &-content {
@@ -86,6 +100,7 @@
 .script-conditions-editor-container{
   width: 1000px;
 }
+
 .form-details-1{
   padding: 30px;
   border-right: 1px solid #dddddd;
