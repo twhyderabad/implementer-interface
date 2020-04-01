@@ -63,7 +63,9 @@ export default class FormConditionsModal extends Component {
     return null;
   }
   render() {
-    const controlEvents = this.props.controlEvents !== undefined ? this.props.controlEvents : [];
+    const obs = this.props.controlEvents !== undefined ? this.props.controlEvents : [];
+    const ObsWithControlEvents = obs.filter(o => o.events !== undefined);
+    const obsWithoutControlEvents = obs.filter(o => o.events === undefined);
     return (
       <div>
         <div className="dialog-wrapper"></div>
@@ -93,9 +95,22 @@ export default class FormConditionsModal extends Component {
                <label style={{ float: 'left', fontWeight: 'bolder' }}>Control Events:</label>
                <select onChange={this.updateSelectedOption} style={{ float: 'right' }} >
                  <option key="0" value="0">Select Option</option>
-                 {controlEvents.map((e) => <option key={e.id} value={e.id} >{e.name}</option>)}
+                 {obsWithoutControlEvents.map((e) =>
+                   <option key={e.id} value={e.id} >{e.name}</option>)}
                </select>
              </div><br /><br /><br /><br />
+             <div>
+               {
+               ObsWithControlEvents.map((e) =>
+                  <ScriptEditorComponentModal
+                    close={this.props.close}
+                    script={e.events.onValueChange}
+                    title={`Control Id: ${e.id}    Control Name: ${e.name}`}
+                    updateScript={this.props.updateScript}
+                  />
+                  )
+               }
+             </div>
               {
                 <div> {this.showControlEventScript()}<br /><br /> </div>
               }
