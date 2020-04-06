@@ -9,7 +9,7 @@ import { httpInterceptor } from 'common/utils/httpInterceptor';
 import { formBuilderConstants } from 'form-builder/constants';
 import { UrlHelper } from 'form-builder/helpers/UrlHelper';
 import { getStore } from 'test/utils/storeHelper';
-import { clearTranslations } from 'form-builder/actions/control';
+import { clearTranslations, formLoad } from 'form-builder/actions/control';
 import { MemoryRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import * as FormBuilderBreadcrumbs from 'form-builder/components/FormBuilderBreadcrumbs.jsx';
@@ -174,6 +174,7 @@ describe('FormDetailContainer', () => {
       'resources:(value,dataType,uuid))';
     const formResourceURL = `${formBuilderConstants.formUrl}/${'FID'}?${params}`;
     sinon.stub(httpInterceptor, 'get').callsFake(() => Promise.resolve(formData));
+
     const wrapper = mount(
       <Provider store={getStore()}>
       <FormDetailContainer
@@ -190,6 +191,21 @@ describe('FormDetailContainer', () => {
 
     sinon.assert.calledWith(httpInterceptor.get, formResourceURL);
   });
+
+  /* it('should call FormDetail with  appropriate controls', () => {
+    sinon.stub(httpInterceptor, 'get').callsFake(() => Promise.resolve(formData));
+    const dispatch = sinon.spy();
+    const wrapper = shallow(
+      <FormDetailContainer
+        {...defaultProps}
+        dispatch={dispatch}
+      />, { context, store: {} }
+    );
+    const wrapperInstance = wrapper.instance();
+    sinon.stub(wrapperInstance, 'getFormJson').callsFake(() => formJson);
+    wrapperInstance.componentDidMount();
+    sinon.assert.calledOnce(dispatch.withArgs(formLoad(formJson.controls)));
+  }); */
 
   it('should not show publish button & save button before get formData', () => {
     const wrapper = mount(
