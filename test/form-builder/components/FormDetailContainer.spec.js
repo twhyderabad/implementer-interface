@@ -183,20 +183,6 @@ describe('FormDetailContainer', () => {
     sinon.assert.calledWith(httpInterceptor.get, formResourceURL);
   });
 
-  /* it('should call FormDetail with  appropriate controls', () => {
-    sinon.stub(httpInterceptor, 'get').callsFake(() => Promise.resolve(formData));
-    const dispatch = sinon.spy();
-    const wrapper = shallow(
-      <FormDetailContainer
-        {...defaultProps}
-        dispatch={dispatch}
-      />, { context, store: {} }
-    );
-    const wrapperInstance = wrapper.instance();
-    sinon.stub(wrapperInstance, 'getFormJson').callsFake(() => formJson);
-    wrapperInstance.componentDidMount();
-    sinon.assert.calledOnce(dispatch.withArgs(formLoad(formJson.controls)));
-  }); */
 
   it('should not show publish button & save button before get formData', () => {
     const wrapper = mount(
