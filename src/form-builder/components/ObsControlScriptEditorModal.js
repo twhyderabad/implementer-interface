@@ -90,3 +90,4 @@ ObsControlScriptEditorModal.propTypes = {
   titleName: PropTypes.string,
   updateScript: PropTypes.func.isRequired,
 };
+
