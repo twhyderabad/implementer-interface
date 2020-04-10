@@ -147,3 +147,18 @@
 .CodeMirror-lint-tooltip{
   z-index: 1002 !important; /* stylelint-disable-line declaration-no-important */
 }
+
+.line-break-1 {
+  display: block;
+  margin-bottom: 1em;
+}
+
+.line-break-2 {
+  display: block;
+  margin-bottom: 2em;
+}
+
+.line-break-3 {
+  display: block;
+  margin-bottom: 3em;
+}
