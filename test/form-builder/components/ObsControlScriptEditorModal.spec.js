@@ -56,7 +56,8 @@ describe('ObsControlScriptEditorModal', () => {
     expect(wrapper.find('.control-modal .editor-wrapper')).to.have.length(0);
   });
 
-  it('should render save event or form event control script editor modal', () => {
+  it('should render save event or form event control script editor modal ' +
+    'when controlEventTitleId is null', () => {
     const controlScript = '';
     const controlEventTitleId = null;
     const controlEventTitleName = 'title';
@@ -72,23 +73,7 @@ describe('ObsControlScriptEditorModal', () => {
     expect(wrapper.find('.control-modal .label-value')).to.have.length(0);
   });
 
-  it('should render save event or form event control script editor modal', () => {
-    const controlScript = '';
-    const controlEventTitleId = null;
-    const controlEventTitleName = 'title';
-    wrapper = mount(
-      <ObsControlScriptEditorModal
-        close={closeSpy}
-        script={controlScript}
-        titleId={controlEventTitleId}
-        titleName={controlEventTitleName}
-        updateScript={updateScriptSpy}
-      />);
-    expect(wrapper.find('.control-modal')).to.have.length(1);
-    expect(wrapper.find('.control-modal .label-value')).to.have.length(0);
-  });
-
-  it('should  modal', () => {
+  it('should update obs control script editor text when script is passed', () => {
     const controlScript = 'test';
     const controlEventTitleId = null;
     const controlEventTitleName = 'title';
@@ -103,14 +88,11 @@ describe('ObsControlScriptEditorModal', () => {
         updateScript={updateScriptSpy}
       />);
     const instance = wrapper.instance();
-
-    // instance.prevScriptEditorTextArea = controlScript;
     instance.componentDidUpdate();
-    expect(instance.prevScriptEditorTextArea).to.eq(controlScript);
+    expect(wrapper.find('.control-modal .editor-wrapper').text()).to.eq(controlScript);
   });
 
-  it('should  modal1', () => {
-    // const controlScript = 'test';
+  it('should update obs control script editor text to empty when script is not passed', () => {
     const controlEventTitleId = null;
     const controlEventTitleName = 'title';
     codeMirrorStub = sinon.stub(CodeMirror, 'fromTextArea')
@@ -123,9 +105,7 @@ describe('ObsControlScriptEditorModal', () => {
         updateScript={updateScriptSpy}
       />);
     const instance = wrapper.instance();
-
-    // instance.prevScriptEditorTextArea = controlScript;
     instance.componentDidUpdate();
-    expect(instance.prevScriptEditorTextArea).to.eq('');
+    expect(wrapper.find('.control-modal .editor-wrapper').text()).to.eq('');
   });
 });

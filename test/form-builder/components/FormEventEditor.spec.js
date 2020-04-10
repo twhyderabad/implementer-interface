@@ -135,8 +135,8 @@ describe('FormEventEditorWithRedux_where_formConditionsEvent_is_true', () => {
         store = {store}
       />);
   });
-  it('should update saveEventUpdate property when updateScript is called ' +
-    'and formSaveEvent is true', () => {
+  it('should update formConditionsEvent property when updateScript is called ' +
+    'and formConditionsEvent is true', () => {
     const script = 'abcd';
     wrapper.find('FormEventEditor').prop('updateScript')(script, property);
     sinon.assert.calledOnce(store.dispatch);
@@ -162,8 +162,8 @@ describe('FormEventEditorWithRedux_where_formConditionsEvent_is_false', () => {
       />);
   });
 
-  it('should update saveEventUpdate property when updateScript ' +
-    'is called and formSaveEvent is false', () => {
+  it('should update formConditionsEvent property when updateScript ' +
+    'is called and formConditionsEvent is false', () => {
     const script = 'abcd';
     wrapper.find('FormEventEditor').prop('updateScript')(script, property);
     sinon.assert.callCount(store.dispatch, 0);
