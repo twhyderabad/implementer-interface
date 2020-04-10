@@ -310,5 +310,7 @@ describe('FormDetails', () => {
       .prop('controlEvents')).to.eq(allObsControlEvents);
     expect(wrapper.find('FormEventEditor').find('Popup').find('default')
       .prop('script')).to.eq(undefined);
+    expect(wrapper.find('FormEventEditor').find('Popup').find('default')
+      .prop('updateAllScripts')).to.eq(wrapper.find('FormEventEditor').prop('updateAllScripts'));
   });
 });
