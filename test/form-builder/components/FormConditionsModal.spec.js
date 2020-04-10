@@ -48,7 +48,7 @@ describe('FormConditionsModal', () => {
     sinon.assert.calledWith(wrapperInstance.showObsControlScriptEditorModal,
       undefined, null, 'Save Event');
     sinon.assert.calledWith(wrapperInstance.showObsControlScriptEditorModal,
-      undefined,undefined, undefined);
+      undefined, undefined, undefined);
 
     expect(wrapper.find('ObsControlScriptEditorModal').length).to.eq(2);
   });
@@ -123,7 +123,20 @@ describe('FormConditionsModal', () => {
 
   it('should rerender ObsControlScriptEditorModal on change  of obs dropdown', () => {
     closeSpy = sinon.spy();
-    formControlEvents = [{ id: '1', name: 'obs1' }];
+    wrapper = shallow(
+      <FormConditionsModal
+        close={closeSpy}
+        formDetails={formDetails}
+        formTitle={formTitle}
+        script={script}
+        updateScript={() => {}}
+      />);
+    expect(wrapper.find('.obs-dropdown option').length).to.eq(1);
+  });
+
+  it('should rerender ObsControlScriptEditorModal on change  of obs dropdown', () => {
+    closeSpy = sinon.spy();
+    formControlEvents = [{ id: '1', name: 'obs1', events: { onValueChange: 'func' } }];
     wrapper = shallow(
       <FormConditionsModal
         close={closeSpy}
@@ -136,5 +149,24 @@ describe('FormConditionsModal', () => {
     wrapper.find('.obs-dropdown').simulate('change', { target: { value: '1' } });
     expect(wrapper.state('selectedControlEventTitleId')).to.eq(formControlEvents[0].id);
     expect(wrapper.state('selectedControlEventTitleName')).to.eq(formControlEvents[0].name);
+    expect(wrapper.state('selectedControlScript')).to.eq(formControlEvents[0].events.onValueChange);
+  });
+
+  it('should not render ObsControlScriptEditorModal when obs dropdown set to select option', () => {
+    closeSpy = sinon.spy();
+    formControlEvents = [{ id: '1', name: 'obs1' }];
+    wrapper = shallow(
+      <FormConditionsModal
+        close={closeSpy}
+        controlEvents={formControlEvents}
+        formDetails={formDetails}
+        formTitle={formTitle}
+        script={script}
+        updateScript={() => {}}
+      />);
+    wrapper.find('.obs-dropdown').simulate('change', { target: { value: '0' } });
+    expect(wrapper.state('selectedControlEventTitleId')).to.eq(undefined);
+    expect(wrapper.state('selectedControlEventTitleName')).to.eq(undefined);
+    expect(wrapper.state('selectedControlScript')).to.eq(undefined);
   });
 });

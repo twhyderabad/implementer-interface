@@ -8,7 +8,6 @@ export default class FormConditionsModal extends Component {
     this.state = { selectedControlEventTitleId: undefined,
       selectedControlEventTitleName: undefined, selectedControlScript: undefined };
     this.selectedControlOption = undefined;
-    this.prevSelectedControlOption = undefined;
     this.selectedControlTitleId = undefined;
     this.selectedControlTitleName = undefined;
     this.selectedControlScript = undefined;
@@ -16,7 +15,6 @@ export default class FormConditionsModal extends Component {
   }
 
   updateSelectedOption(element) {
-    this.prevSelectedControlOption = this.selectedControlOption;
     this.selectedControlOption = element.target.value;
     const selectedControlEventObj = this.props.controlEvents.find(control =>
       control.id === this.selectedControlOption);
@@ -27,11 +25,9 @@ export default class FormConditionsModal extends Component {
       undefined;
     this.selectedControlScript = selectedControlScriptObj ?
       selectedControlScriptObj.onValueChange : undefined;
-    if (this.selectedControlOption !== this.prevSelectedControlOption) {
-      this.setState({ selectedControlEventTitleId: this.selectedControlTitleId });
-      this.setState({ selectedControlEventTitleName: this.selectedControlTitleName });
-      this.setState({ selectedControlScript: this.selectedControlScript });
-    }
+    this.setState({ selectedControlEventTitleId: this.selectedControlTitleId });
+    this.setState({ selectedControlEventTitleName: this.selectedControlTitleName });
+    this.setState({ selectedControlScript: this.selectedControlScript });
   }
 
   showObsControlScriptEditorModal(controlScript, controlEventTitleId, controlEventTitleName) {
