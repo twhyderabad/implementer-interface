@@ -119,6 +119,15 @@ describe('FormDetailContainer', () => {
     formEventEditorStub.restore();
   });
 
+  afterEach(() => {
+    if (httpInterceptor && httpInterceptor.get.restore) {
+      httpInterceptor.get.restore();
+    }
+    if (httpInterceptor && httpInterceptor.post.restore) {
+      httpInterceptor.post.restore();
+    }
+  });
+
   it('should render appropriate controls with appropriate props', () => {
     sinon.stub(httpInterceptor, 'get').callsFake(() => Promise.resolve(formData));
     const wrapper = mount(
@@ -227,6 +236,29 @@ describe('FormDetailContainer', () => {
       httpInterceptor.post.restore();
       done();
     }, 500);
+  });
+
+  it('should call the appropriate endpoint to fetch the formData', (done) => {
+    const params =
+      'v=custom:(id,uuid,name,version,published,auditInfo,' +
+      'resources:(value,dataType,uuid))';
+    const formResourceURL = `${formBuilderConstants.formUrl}/${'FID'}?${params}`;
+    sinon.stub(httpInterceptor, 'get').callsFake(() => Promise.resolve(formData));
+    const wrapper = mount(
+      <Provider store={getStore()}>
+      <FormDetailContainer
+        {...defaultProps}
+      /></Provider>, { context }
+    );
+    setTimeout(() => {
+      wrapper.find('FormDetailContainer').update();
+      const formDetail = wrapper.find('FormDetail');
+      expect(formDetail.prop('formData')).to.eql(formData);
+      httpInterceptor.get.restore();
+      done();
+    }, 500);
+
+    sinon.assert.calledWith(httpInterceptor.get, formResourceURL);
   });
 
   it('should call the cloneFormResource when name changed and click save button', () => {
@@ -961,6 +993,18 @@ describe('FormDetailContainer', () => {
 
       const notificationContainer = wrapper.find('NotificationContainer');
       expect(notificationContainer.prop('notification').message).to.equal('Section/Table is empty');
+    });
+
+    it('should show preview button after publish', () => {
+      const wrapper = mount(
+          <Provider store={getStore()}>
+            <FormDetailContainer
+              {...defaultProps}
+            /></Provider>, { context }
+      );
+      wrapper.find('FormDetailContainer').setState({ httpReceived: false });
+      const previewButton = wrapper.find('.preview-button');
+      expect(previewButton).to.have.length(1);
     });
 
     it('should copy the translation to new version after editing', (done) => {
