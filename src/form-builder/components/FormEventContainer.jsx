@@ -1,13 +1,18 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { setChangedProperty } from '../actions/control';
+import { formLoad, setChangedProperty } from '../actions/control';
+import FormHelper from 'form-builder/helpers/formHelper';
+import { commonConstants } from 'common/constants';
+import NotificationContainer from 'common/Notification';
 
 export class FormEventContainer extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { events: {} };
+    this.state = { events: {} , errorMessage: {} };
+
+    this.setErrorMessage = this.setErrorMessage.bind(this);
   }
 
   componentWillUpdate(newProps) {
@@ -17,8 +22,24 @@ export class FormEventContainer extends Component {
       this.props.updateFormEvents(updatedEvents);
     }
   }
-
+  setErrorMessage(errorMessage) {
+    const errorNotification = {
+      message: errorMessage,
+      type: commonConstants.responseType.error,
+    };
+    this.setState({ errorMessage: errorNotification });
+    setTimeout(() => {
+      this.setState({ errorMessage: {} });
+    }, commonConstants.toastTimeout);
+  }
   updateProperty() {
+    /* try {
+      const formJson = this.props.loadFormJson();
+      const formControlEvents = FormHelper.getObsControlEvents(formJson);
+      this.props.dispatch(formLoad(formControlEvents));
+    } catch (e) {
+      this.setErrorMessage(e.message);
+    } */
     const properties = { [this.props.eventProperty]: true };
     this.props.dispatch(setChangedProperty(properties));
   }
@@ -41,6 +62,7 @@ FormEventContainer.propTypes = {
   eventProperty: PropTypes.string,
   formDetails: PropTypes.object,
   label: PropTypes.string,
+  loadFormJson: PropTypes.func,
   updateFormEvents: PropTypes.func,
 };
 

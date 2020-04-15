@@ -491,6 +491,7 @@ export class FormDetailContainer extends Component {
                     {this.showPreviewModal()}
                   <FormDetail
                     defaultLocale={defaultLocale}
+                    dispatch={this.props.dispatch}
                     formControlEvents={this.props.formControlEvents}
                     formData={this.state.formData}
                     formDetails={this.props.formDetails}

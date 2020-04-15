@@ -42,7 +42,7 @@ export default class FormHelper {
     return obsControlEvents;
   }
 
-  static getObsControlIdsForGivenControl(control, id) {
+  /* static getObsControlIdsForGivenControl(control, id) {
     if (control.id === id && control.type === 'obsControl') {
       return [control.id];
     } else if (control.id === id) {
@@ -58,5 +58,9 @@ export default class FormHelper {
       }
     }
     return null;
+  } */
+  static getObsControlIdsForGivenControl(control) {
+    const obsControlEvents = this.getObsControlEvents(control);
+    return obsControlEvents.map(c => c.id);
   }
 }

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { ControlPool } from 'form-builder/components/ControlPool.jsx';
 import Canvas from 'form-builder/components/Canvas.jsx';
@@ -11,6 +11,9 @@ import FormEventEditor from 'form-builder/components/FormEventEditor.jsx';
 import ScriptEditorModal from 'form-builder/components/ScriptEditorModal';
 import Popup from 'reactjs-popup';
 import FormConditionsModal from 'form-builder/components/FormConditionsModal';
+import { formLoad } from 'form-builder/actions/control';
+import { commonConstants } from 'common/constants';
+import NotificationContainer from 'common/Notification';
 
 
 export default class FormDetail extends Component {
@@ -31,6 +34,7 @@ export default class FormDetail extends Component {
       }
     };
   }
+
 
   getFormJson() {
     if (this.canvas) {
@@ -68,14 +72,37 @@ export default class FormDetail extends Component {
           : formDetails.events.onFormInit);
       };
       const FormEventEditorContent = (props) => {
+        const [errMessage, setErrMessage] = useState('Initial');
+        let formControlEvents = [];
         const script = props.property ? getScript(props.property, props.formDetails) : '';
         const showEditor = props.property && (props.property.formInitEvent
           || props.property.formSaveEvent || props.property.formConditionsEvent);
+        const setErrorMessage = (errorMessage) => {
+          const errorNotification = {
+            message: errorMessage,
+            type: commonConstants.responseType.error,
+          };
+          setErrMessage(errorNotification);
+        };
+        useEffect(() => {
+          if (props.property && props.property.formConditionsEvent) {
+            try {
+              const formJson = this.getFormJson();
+             // formControlEvents = FormHelper.getObsControlEvents(formJson);
+             // this.props.dispatch(formLoad(formControlEvents));
+            } catch (e) {
+              setErrorMessage(e.message);
+              // showEditor = false;
+            }
+          }
+        });
+
         if (!showEditor) {
           return (<div></div>);
         }
         if (props.property.formConditionsEvent) {
           return (<div>
+            <NotificationContainer notification={errMessage} />
             {showEditor &&
             <Popup className="form-event-popup" closeOnDocumentClick={false}
               closeOnEscape={false}
@@ -83,7 +110,7 @@ export default class FormDetail extends Component {
             >
               <FormConditionsModal
                 close={props.closeEventEditor}
-                controlEvents={props.formControlEvents}
+                controlEvents={formControlEvents}
                 formDetails={props.formDetails}
                 formTitle={this.formTitle(name, version, published, editable)}
                 updateAllScripts={props.updateAllScripts}
@@ -110,6 +137,7 @@ export default class FormDetail extends Component {
       };
       return (
                 <div>
+
                     <FormEventEditor children={<FormEventEditorContent />} />
                     <div className="button-wrapper">
                     </div>
@@ -138,6 +166,7 @@ export default class FormDetail extends Component {
                                   eventProperty={'formConditionsEvent'}
                                   formTitle={this.props.formData.name}
                                   label={'Form Conditions'}
+                                  loadFormJson={this.getFormJson}
                                   updateFormEvents={this.props.updateFormEvents}
                                 />
                             </div>
@@ -169,6 +198,7 @@ export default class FormDetail extends Component {
 
 FormDetail.propTypes = {
   defaultLocale: PropTypes.string,
+  dispatch: PropTypes.func,
   formControlEvents: PropTypes.Array,
   formData: PropTypes.shape({
     id: PropTypes.number,
