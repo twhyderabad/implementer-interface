@@ -1,17 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { deleteControl } from 'form-builder/actions/control';
-import FormHelper from '../helpers/formHelper';
 
 export default class DeleteControlModal extends Component {
 
   deleteControl(e) {
     e.preventDefault();
-    const formJson = this.props.loadFormJson();
     this.props.deleteControl(this.props.controlId);
     this.props.closeModal();
-    const controlIds = FormHelper.getObsControlIdsForGivenControl(formJson, this.props.controlId);
-    this.props.dispatch(deleteControl(controlIds));
   }
 
   handleEsc(e) {
@@ -51,5 +46,4 @@ DeleteControlModal.propTypes = {
   controlName: PropTypes.string,
   deleteControl: PropTypes.func.isRequired,
   dispatch: PropTypes.func.isRequired,
-  loadFormJson: PropTypes.func,
 };
